@@ -12,9 +12,6 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0.9"
-        ndk {
-            abiFilters "armeabi", "armeabi-v7a", "x86"
-        }
     }
 
     buildTypes {
