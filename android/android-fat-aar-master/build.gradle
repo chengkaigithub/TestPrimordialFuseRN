@@ -1,0 +1,54 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.3'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+
+apply plugin: 'com.android.library'
+
+// For publishing
+group "com.adwiv.public"
+version '1.2.3'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "25.0.0"
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+apply from: 'fat-aar.gradle'
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Order of dependencies decide which will have precedence in case of duplicates
+    // during manifest / resource merger
+//    embedded project(':librarytwo')
+//    embedded project(':libraryone')
+    // We can embed android libraries from maven too
+    embedded 'com.adwiv.internal:librarythree:1.0.0'
+
+    compile 'com.android.support:appcompat-v7:22.2.0' //Non embedded dependency
+}
+
+// For publishing this library
+apply from: 'publish.gradle'

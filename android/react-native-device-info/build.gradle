@@ -1,0 +1,50 @@
+apply plugin: 'com.android.library'
+
+def DEFAULT_COMPILE_SDK_VERSION             = 26
+def DEFAULT_BUILD_TOOLS_VERSION             = "26.0.2"
+def DEFAULT_TARGET_SDK_VERSION              = 22
+def DEFAULT_REACTNATIVE_VERSION             = "0.56.0"
+
+ext {
+    reactnativeVersion = project.hasProperty('reactNativeVersion') ? project.reactNativeVersion : DEFAULT_REACTNATIVE_VERSION
+}
+
+android {
+    compileSdkVersion project.hasProperty('compileSdkVersion') ? project.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
+    buildToolsVersion project.hasProperty('buildToolsVersion') ? project.buildToolsVersion : DEFAULT_BUILD_TOOLS_VERSION
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion project.hasProperty('targetSdkVersion') ? project.targetSdkVersion : DEFAULT_TARGET_SDK_VERSION
+        versionCode 2
+        versionName "1.1"
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
+    }
+    lintOptions {
+       warning 'InvalidPackage'
+    }
+}
+
+dependencies {
+    implementation "com.facebook.react:react-native:${reactnativeVersion}"
+}
+
+ext {
+    PUBLISH_GROUP_ID = 'com.chengkai.helper'
+    PUBLISH_ARTIFACT_ID = 'react-native-device-info'
+    PUBLISH_VERSION = android.defaultConfig.versionName
+}
+apply plugin: 'maven'
+uploadArchives {
+    repositories.mavenDeployer {
+        def deployPath = file(getProperty('aar.deployPath'))
+        repository(url: "file://${deployPath.absolutePath}")
+        pom.project {
+            groupId project.PUBLISH_GROUP_ID
+            artifactId project.PUBLISH_ARTIFACT_ID
+            version project.PUBLISH_VERSION
+        }
+    }
+}

@@ -1,0 +1,1 @@
+include ':app', ':react-native-module', 'react-native-device-info', ':react-native-code-push'

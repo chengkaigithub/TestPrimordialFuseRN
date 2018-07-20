@@ -1,0 +1,56 @@
+apply plugin: 'com.android.library'
+
+ext {
+    reactnativeVersion = "0.56.0"
+}
+
+android {
+    compileSdkVersion 26
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0.9"
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "x86"
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "com.facebook.react:react-native:${reactnativeVersion}"
+    implementation 'com.chengkai.helper:react-native-device-info:1.1'
+    implementation 'com.chengkai.helper:react-native-code-push:1.0'
+}
+
+ext {
+    PUBLISH_GROUP_ID = 'com.chengkai.helper'
+    PUBLISH_ARTIFACT_ID = 'react-native-module'
+    PUBLISH_VERSION = android.defaultConfig.versionName
+}
+apply plugin: 'maven'
+uploadArchives {
+    repositories.mavenDeployer {
+        def deployPath = file(getProperty('aar.deployPath'))
+        repository(url: "file://${deployPath.absolutePath}")
+        pom.project {
+            groupId project.PUBLISH_GROUP_ID
+            artifactId project.PUBLISH_ARTIFACT_ID
+            version project.PUBLISH_VERSION
+        }
+    }
+}

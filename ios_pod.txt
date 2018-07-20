@@ -1,0 +1,31 @@
+step1 添加到仓库:
+pod repo add TestMPOSRN https://github.com/chengkaigithub/TestPrimordialFuseRN.git
+
+step2 创建、编辑podspec文件:
+pod spec create projectName
+
+step3 校验podspec文件:
+cd ~/.cocoapods/repos/projectName
+pod lib lint // 本地校验
+pod spec lint // 联网校验
+选项：--verbose显示详细编译信息，—allow-warnings忽略警告，—sources编译时用到的源码地址，—use-libraries编译时加载依赖的其他静态库
+// pod spec lint TestMPOSRN.podspec --verbose --use-libraries
+// pod lib lint TestMPOSRN.podspec --verbose --use-libraries
+
+step4 提交文件到git
+step5 首次发布需要注册:(非首次忽略)
+pod trunk register emailName@xxx.com “userName” --description=“iMac” --verbose
+pod trunk me // 查看邮箱,并验证注册状态
+
+step5 发布到git服务器:
+pod trunk push projectName.podspec
+pod repo push projectName projectName.podspec // 或先提交到本地仓库
+
+step6 发布成功后，可以更新本地仓库:
+pod repo update
+
+
+
+csdn:
+https://blog.csdn.net/potato512/article/details/72616492
+https://www.jianshu.com/p/5b950e89e1ac
